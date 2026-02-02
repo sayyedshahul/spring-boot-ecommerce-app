@@ -21,4 +21,11 @@ public class CategoryServiceImpl implements CategoryService{
         category.setCategoryId(nextId++);
         categories.add(category);
     }
+
+    @Override
+    public String deleteCategory(Long categoryId) {
+        if(categories.removeIf(x -> x.getCategoryId() == categoryId))
+            return "Category with categoryId " + categoryId + " deleted successfully.";
+        return "Category not found";
+    }
 }
