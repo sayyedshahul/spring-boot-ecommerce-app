@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
-    
+
     @Autowired
     private CategoryRepository categoryRepository;
 
@@ -29,33 +29,22 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public String deleteCategory(Long categoryId) {
-        List<Category> categories = categoryRepository.findAll();
+        Category foundCategory =
+                categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
 
-        Optional<Category> optionalCategory = categories.stream()
-                .filter(x -> x.getCategoryId() == categoryId)
-                .findFirst();
-
-        if(optionalCategory.isPresent()) {
-            categoryRepository.delete(optionalCategory.get());
-            return "Category with categoryId " + categoryId + " deleted successfully.";
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found");
+        categoryRepository.delete(foundCategory);
+        return "Category with categoryId " + categoryId + " deleted successfully.";
     }
 
     @Override
     public String updateCategory(Category category, long categoryId) {
-        List<Category> categories = categoryRepository.findAll();
+        Category foundCategory =
+                categoryRepository.findById(categoryId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found"));
 
-        Optional<Category> optionalCategory = categories.stream()
-                .filter(x -> x.getCategoryId() == categoryId)
-                .findFirst();
-
-        if(optionalCategory.isPresent()){
-            Category foundCategory = optionalCategory.get();
-            foundCategory.setCategoryName(category.getCategoryName());
-            categoryRepository.save(foundCategory);
-            return "Category with categoryId " + categoryId + " updated successfully.";
-        }
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Resource not found");
+        foundCategory.setCategoryName(category.getCategoryName());
+        categoryRepository.save(foundCategory);
+        return "Category with categoryId " + categoryId + " updated successfully.";
     }
 }
