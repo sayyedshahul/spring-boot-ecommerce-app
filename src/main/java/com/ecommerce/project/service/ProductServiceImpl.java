@@ -10,9 +10,17 @@ import com.ecommerce.project.repositories.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +28,10 @@ public class ProductServiceImpl implements ProductService{
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
+    private final FileService fileService;
+
+    @Value("${project.image.upload.path}")
+    private String imageUploadPath;
 
     @Override
     public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
@@ -112,5 +124,19 @@ public class ProductServiceImpl implements ProductService{
         productRepository.delete(productFromDb);
 
         return modelMapper.map(productFromDb, ProductDTO.class);
+    }
+
+    @Override
+    public ProductDTO updateProductImage(Long productId, MultipartFile image) throws IOException {
+        Product productFromDb = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        String fileName = fileService.uploadImage(imageUploadPath, image);
+
+        productFromDb.setImage(fileName);
+
+        Product savedProduct = productRepository.save(productFromDb);
+
+        return modelMapper.map(savedProduct, ProductDTO.class);
     }
 }

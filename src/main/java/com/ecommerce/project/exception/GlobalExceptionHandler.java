@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,4 +37,10 @@ public class GlobalExceptionHandler {
         APIResponse response = new APIResponse(e.getMessage(), false);
         return ResponseEntity.badRequest().body(response);
     }
+
+//    @ExceptionHandler(IOException.class)
+//    public ResponseEntity<String> handleIOException(IOException e){
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                .body("File error occurred");
+//    }
 }
