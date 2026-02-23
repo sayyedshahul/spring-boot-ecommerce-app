@@ -37,10 +37,4 @@ public class GlobalExceptionHandler {
         APIResponse response = new APIResponse(e.getMessage(), false);
         return ResponseEntity.badRequest().body(response);
     }
-
-//    @ExceptionHandler(IOException.class)
-//    public ResponseEntity<String> handleIOException(IOException e){
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-//                .body("File error occurred");
-//    }
 }

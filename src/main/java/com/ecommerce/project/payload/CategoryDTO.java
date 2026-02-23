@@ -1,13 +1,17 @@
 package com.ecommerce.project.payload;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDTO {
     private Long categoryId;
+
+    @NotBlank
+    @Size(min = 5, message = "Category name should be more than 5 characters")
     private String categoryName;
 }
