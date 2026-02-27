@@ -1,0 +1,23 @@
+package com.ecommerce.project.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Table(name = "roles")
+@Getter
+@Setter
+public class Roles {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
+    private Long roleId;
+
+    @ToString.Exclude
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20, name = "role_name")
+    private AppRole roleName;
+}
