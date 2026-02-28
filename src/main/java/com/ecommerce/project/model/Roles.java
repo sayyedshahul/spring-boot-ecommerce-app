@@ -2,6 +2,7 @@ package com.ecommerce.project.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -9,6 +10,7 @@ import lombok.ToString;
 @Table(name = "roles")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Roles {
 
     @Id
@@ -20,4 +22,8 @@ public class Roles {
     @Enumerated(EnumType.STRING)
     @Column(length = 20, name = "role_name")
     private AppRole roleName;
+
+    public Roles(AppRole roleName) {
+        this.roleName = roleName;
+    }
 }
