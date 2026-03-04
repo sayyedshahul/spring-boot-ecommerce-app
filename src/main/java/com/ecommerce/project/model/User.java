@@ -57,6 +57,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "address_id"))
     private Set<Address> addresses = new HashSet<>();
 
+    @ToString.Exclude
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private Cart cart;
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;

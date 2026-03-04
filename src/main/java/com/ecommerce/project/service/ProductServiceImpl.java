@@ -2,10 +2,12 @@ package com.ecommerce.project.service;
 
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
+import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
+import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +29,8 @@ public class ProductServiceImpl implements ProductService{
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
     private final FileService fileService;
+    private final CartRepository cartRepository;
+    private final CartService cartService;
 
     @Value("${project.image.upload.path}")
     private String imageUploadPath;
@@ -156,6 +160,11 @@ public class ProductServiceImpl implements ProductService{
         productFromDb.setSpecialPrice(product.getSpecialPrice());
 
         Product savedProduct = productRepository.save(productFromDb);
+
+        List<Cart> carts = cartRepository.findCartsByProduct(productId);
+
+        carts.forEach(cart -> cartService.updateProductInCart(cart.getCartId(), productId));
+
         return modelMapper.map(savedProduct, ProductDTO.class);
     }
 
@@ -165,7 +174,7 @@ public class ProductServiceImpl implements ProductService{
                 new ResourceNotFoundException("Product", "productId", productId));
 
         productRepository.delete(productFromDb);
-
+        
         return modelMapper.map(productFromDb, ProductDTO.class);
     }
 
