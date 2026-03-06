@@ -1,9 +1,11 @@
 package com.ecommerce.project.controller;
 
 import com.ecommerce.project.config.AppConstants;
+import com.ecommerce.project.model.User;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.service.ProductService;
+import com.ecommerce.project.util.AuthUtil;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,13 @@ import java.io.IOException;
 public class ProductController {
 
     private final ProductService productService;
+    private final AuthUtil authUtils;
 
     @PostMapping("/admin/categories/{categoryId}/product")
     public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO,
                                               @PathVariable Long categoryId){
-        ProductDTO savedProductDTO = productService.addProduct(categoryId, productDTO);
+        User user = authUtils.getLoggedInUser();
+        ProductDTO savedProductDTO = productService.addProduct(categoryId, productDTO, user);
         return new ResponseEntity<>(savedProductDTO, HttpStatus.CREATED);
     }
 

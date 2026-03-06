@@ -52,7 +52,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration authConfig){
+    public AuthenticationManager getAuthenticationManager(AuthenticationConfiguration authConfig) throws Exception{
         return authConfig.getAuthenticationManager();
     }
 
@@ -62,7 +62,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain getSecurityFilterChain(HttpSecurity http){
+    public SecurityFilterChain getSecurityFilterChain(HttpSecurity http) throws Exception{
         http.csrf(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unAuthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -71,7 +71,7 @@ public class WebSecurityConfig {
                                                  auth.requestMatchers("/api/auth/**").permitAll()
                                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                                 .requestMatchers("/h2-console/**").permitAll()
-                                                .requestMatchers("/api/admin/**").permitAll()
+                                                //.requestMatchers("/api/admin/**").permitAll()
                                                 .requestMatchers("/api/public/**").permitAll()
                                                 .requestMatchers("/swagger-ui/**").permitAll()
                                                 .requestMatchers("/api/test/**").permitAll()
@@ -133,6 +133,11 @@ public class WebSecurityConfig {
                 userRepository.save(seller1);
             }
 
+            if (!userRepository.existsByUsername("seller2")) {
+                User seller2 = new User("seller2", "seller2@example.com", passwordEncoder.encode("password3"));
+                userRepository.save(seller2);
+            }
+
             if (!userRepository.existsByUsername("admin")) {
                 User admin = new User("admin", "admin@example.com", passwordEncoder.encode("adminPass"));
                 userRepository.save(admin);
@@ -145,6 +150,11 @@ public class WebSecurityConfig {
             });
 
             userRepository.findByUsername("seller1").ifPresent(seller -> {
+                seller.setUserRoles(sellerRoles);
+                userRepository.save(seller);
+            });
+
+            userRepository.findByUsername("seller2").ifPresent(seller -> {
                 seller.setUserRoles(sellerRoles);
                 userRepository.save(seller);
             });

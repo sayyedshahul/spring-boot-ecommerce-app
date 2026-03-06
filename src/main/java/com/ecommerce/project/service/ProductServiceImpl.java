@@ -5,6 +5,7 @@ import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.Cart;
 import com.ecommerce.project.model.Category;
 import com.ecommerce.project.model.Product;
+import com.ecommerce.project.model.User;
 import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.repositories.CartRepository;
@@ -36,7 +37,7 @@ public class ProductServiceImpl implements ProductService{
     private String imageUploadPath;
 
     @Override
-    public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
+    public ProductDTO addProduct(Long categoryId, ProductDTO productDTO, User user) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new ResourceNotFoundException("Category", "categoryId", categoryId));
 
@@ -51,6 +52,7 @@ public class ProductServiceImpl implements ProductService{
 
         product.setImage("default.png");
         product.setCategory(category);
+        product.setUser(user);
 
         Double specialPrice = product.getPrice() -
                 (product.getDiscount() * 0.01 * product.getPrice());

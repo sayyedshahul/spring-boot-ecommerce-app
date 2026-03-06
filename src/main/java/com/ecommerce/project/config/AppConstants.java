@@ -6,4 +6,6 @@ public class AppConstants {
     public static final String SORT_ORDER = "asc";
     public static final String SORT_CATEGORIES_BY = "categoryId";
     public static final String SORT_PRODUCTS_BY = "productId";
+    public static final String SORT_ORDERS_BY = "orderId";
+    public static final String SORT_SELLER_ORDERS_BY = "quantity";
 }

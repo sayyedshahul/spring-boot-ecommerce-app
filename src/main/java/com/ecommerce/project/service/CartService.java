@@ -1,8 +1,6 @@
 package com.ecommerce.project.service;
 
 import com.ecommerce.project.payload.CartDTO;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 public interface CartService {
@@ -13,7 +11,6 @@ public interface CartService {
 
     CartDTO getCart(String emailId, Long cartId);
 
-    @Transactional
     CartDTO updateProductQuantity(Long productId, Integer quantity);
 
     String deleteProductFromCart(Long cartId, Long productId);
