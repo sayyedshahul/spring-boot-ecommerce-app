@@ -1,6 +1,5 @@
 package com.ecommerce.project.controller;
 
-import com.ecommerce.project.model.Address;
 import com.ecommerce.project.payload.AddressDTO;
 import com.ecommerce.project.payload.AddressResponse;
 import com.ecommerce.project.service.AddressService;
@@ -9,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/addresses")

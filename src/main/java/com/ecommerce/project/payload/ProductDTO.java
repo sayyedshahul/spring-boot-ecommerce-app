@@ -1,6 +1,5 @@
 package com.ecommerce.project.payload;
 
-import com.ecommerce.project.model.Category;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -10,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class ProductDTO {
     private Long productId;
+
     @NotBlank
     @Size(min = 5, max = 30, message = "Product name should be between 5 and 30 characters")
     private String productName;

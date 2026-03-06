@@ -16,9 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
-//import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -83,20 +81,9 @@ public class CartServiceImpl implements CartService{
     public List<CartDTO> getAllCarts() {
         List<Cart> carts = cartRepository.findAll();
 
-        List<CartDTO> cartDTOs = carts.stream().map( cart -> {
-            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
-
-            List<ProductDTO> productDTOs = cart.getCartItems()
-                    .stream().map(item -> {
-                          ProductDTO productDTO = modelMapper.map(item.getProduct(), ProductDTO.class);
-                          productDTO.setQuantity(item.getQuantity());
-                          return productDTO;
-                    }).toList();
-
-            cartDTO.setProductDTOs(productDTOs);
-
-            return cartDTO;
-        }).toList();
+        List<CartDTO> cartDTOs = carts.stream()
+                .map(this::mapCartToCartDTO)
+                .toList();
 
         return cartDTOs;
     }
@@ -106,6 +93,10 @@ public class CartServiceImpl implements CartService{
         Cart cart = cartRepository.findCartByUserEmailAndCartId(emailId, cartId)
                 .orElseThrow(() -> new ResourceNotFoundException("Cart", "cartId", cartId));
 
+        return mapCartToCartDTO(cart);
+    }
+
+    public CartDTO mapCartToCartDTO(Cart cart){
         CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
 
         List<ProductDTO> productDTOs = cart.getCartItems().stream()
@@ -148,7 +139,7 @@ public class CartServiceImpl implements CartService{
             cart.setTotalPrice(cart.getTotalPrice() -
                     (cartItem.getProductPrice() * cartItem.getQuantity()));
             cartItemRepository.deleteCartItemByCartIdAndProductId(cart.getCartId(), product.getProductId());
-            return mapCartToDTO(cart);
+            return mapCartToCartDTO(cart);
         }
         else if(product.getQuantity() < newQuantity) { // check stock
             throw new APIException("Please, make an order of the " + product.getProductName()
@@ -163,7 +154,7 @@ public class CartServiceImpl implements CartService{
 
         cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * cartItem.getQuantity()));
 
-        return mapCartToDTO(cart);
+        return mapCartToCartDTO(cart);
     }
 
     @Transactional
@@ -197,25 +188,10 @@ public class CartServiceImpl implements CartService{
 
         cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity())); // Negate old price.
 
-        System.out.println(product.getSpecialPrice());
         cartItem.setProductPrice(product.getSpecialPrice());
         cartItem.setProductPrice(product.getDiscount());
 
         cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * cartItem.getQuantity())); // Set new price
-    }
-
-
-    public CartDTO mapCartToDTO(Cart cart){
-        CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
-
-        List<ProductDTO> productDTOs = cart.getCartItems().stream()
-                .map(item -> { ProductDTO productDTO = modelMapper.map(item.getProduct(), ProductDTO.class);
-                    productDTO.setQuantity(item.getQuantity());
-                    return productDTO;
-                }).toList();
-        cartDTO.setProductDTOs(productDTOs);
-
-        return cartDTO;
     }
 
     public Cart getCart(){

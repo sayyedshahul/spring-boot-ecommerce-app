@@ -34,8 +34,7 @@ public class AuthUtil {
 
         User user = userRepository.findByUsername(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User Not Found with username: " + authentication.getName()));
+
         return user;
-
     }
-
 }

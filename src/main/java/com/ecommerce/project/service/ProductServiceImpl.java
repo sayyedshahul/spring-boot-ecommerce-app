@@ -63,15 +63,7 @@ public class ProductServiceImpl implements ProductService{
         return modelMapper.map(savedProduct, ProductDTO.class);
     }
 
-    @Override
-    public ProductResponse getAllProducts(int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable productPageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
-
-        Page<Product> productPage = productRepository.findAll(productPageDetails);
+    public ProductResponse convertProductPageToProductResponse(int pageNumber, int pageSize, Page<Product> productPage){
         List<Product> products = productPage.getContent();
 
         List<ProductDTO> productDTOs = products.stream()
@@ -87,6 +79,19 @@ public class ProductServiceImpl implements ProductService{
         productResponse.setLastPage(productPage.isLast());
 
         return productResponse;
+    }
+
+    @Override
+    public ProductResponse getAllProducts(int pageNumber, int pageSize, String sortBy, String sortOrder) {
+        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
+                ? Sort.by(sortBy).ascending()
+                : Sort.by(sortBy).descending();
+
+        Pageable productPageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+
+        Page<Product> productPage = productRepository.findAll(productPageDetails);
+
+        return convertProductPageToProductResponse(pageNumber, pageSize, productPage);
     }
 
     @Override
@@ -101,21 +106,7 @@ public class ProductServiceImpl implements ProductService{
                         new ResourceNotFoundException("Category", "categoryId", categoryId));
 
         Page<Product> productPage = productRepository.findByCategoryOrderByPriceAsc(category, productPageDetails);
-        List<Product> products = productPage.getContent();
-
-        List<ProductDTO> productDTOs = products.stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
-                .toList();
-
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setContent(productDTOs);
-        productResponse.setPageNumber(pageNumber);
-        productResponse.setPageSize(pageSize);
-        productResponse.setTotalPages(productPage.getTotalPages());
-        productResponse.setTotalElements(productPage.getTotalElements());
-        productResponse.setLastPage(productPage.isLast());
-
-        return productResponse;
+        return convertProductPageToProductResponse(pageNumber, pageSize, productPage);
     }
 
     @Override
@@ -126,21 +117,8 @@ public class ProductServiceImpl implements ProductService{
         Pageable productPageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
 
         Page<Product> productPage = productRepository.findByProductNameContainingIgnoreCase(keyword, productPageDetails);
-        List<Product> products = productPage.getContent();
 
-        List<ProductDTO> productDTOs = products.stream()
-                .map(product -> modelMapper.map(product, ProductDTO.class))
-                .toList();
-
-        ProductResponse productResponse = new ProductResponse();
-        productResponse.setContent(productDTOs);
-        productResponse.setPageNumber(pageNumber);
-        productResponse.setPageSize(pageSize);
-        productResponse.setTotalPages(productPage.getTotalPages());
-        productResponse.setTotalElements(productPage.getTotalElements());
-        productResponse.setLastPage(productPage.isLast());
-
-        return productResponse;
+        return convertProductPageToProductResponse(pageNumber, pageSize, productPage);
     }
 
     @Override

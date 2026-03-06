@@ -16,7 +16,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.WebUtils;
-
 import javax.crypto.SecretKey;
 import java.util.Date;
 
@@ -35,7 +34,6 @@ public class JwtUtils {
 
     public String getJwtFromCookie(HttpServletRequest request){
         Cookie cookie = WebUtils.getCookie(request, jwtCookieName);
-       // System.out.println("COOKIE: " + cookie.getValue());
         if(cookie != null){
             return cookie.getValue();
         }

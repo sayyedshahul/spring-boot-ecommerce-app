@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 
@@ -52,7 +51,6 @@ public class OrderServiceImpl implements OrderService{
         payment.setOrder(order);
         orderRepository.save(order);
 
-        //paymentRepository.save(payment);
 
         // Convert cart items to order items.
         List<CartItem> cartItems = cart.getCartItems();

@@ -1,10 +1,7 @@
 package com.ecommerce.project.service;
 
-import com.ecommerce.project.model.Address;
 import com.ecommerce.project.payload.AddressDTO;
 import com.ecommerce.project.payload.AddressResponse;
-
-import java.util.List;
 
 public interface AddressService {
     AddressDTO addAddress(AddressDTO addressDTO);

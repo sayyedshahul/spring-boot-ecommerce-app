@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
 @Component
@@ -51,12 +50,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-
-//    private String parseRequest(HttpServletRequest request) {
-//        String jwt = jwtUtils.getJwtFromCookie(request);
-//        logger.debug("AuthTokenFilter.java: {}", jwt);
-//        return jwt;
-//    }
 
     private String parseRequest(HttpServletRequest request) {
         String jwtFromCookie = jwtUtils.getJwtFromCookie(request);

@@ -1,6 +1,5 @@
 package com.ecommerce.project.repositories;
 
-import com.ecommerce.project.model.Order;
 import com.ecommerce.project.model.OrderItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

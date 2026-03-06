@@ -5,7 +5,6 @@ import com.ecommerce.project.model.Roles;
 import com.ecommerce.project.model.User;
 import com.ecommerce.project.repositories.RoleRepository;
 import com.ecommerce.project.repositories.UserRepository;
-import com.ecommerce.project.security.services.UserDetailsImpl;
 import com.ecommerce.project.security.services.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -20,12 +19,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
@@ -71,7 +68,8 @@ public class WebSecurityConfig {
                                                  auth.requestMatchers("/api/auth/**").permitAll()
                                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                                 .requestMatchers("/h2-console/**").permitAll()
-                                                //.requestMatchers("/api/admin/**").permitAll()
+                                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("api/seller/**").hasRole("SELLER")
                                                 .requestMatchers("/api/public/**").permitAll()
                                                 .requestMatchers("/swagger-ui/**").permitAll()
                                                 .requestMatchers("/api/test/**").permitAll()
