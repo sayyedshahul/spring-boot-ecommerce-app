@@ -113,8 +113,7 @@ public class CartServiceImpl implements CartService{
 
     @Transactional
     @Override
-    public CartDTO updateProductQuantity(Long productId, Integer quantityChange) {
-        User user = authUtils.getLoggedInUser();
+    public CartDTO updateProductQuantity(Long productId, Integer quantityChange, User user) {
         Cart cart = cartRepository.findByUser(user);
 
         if(cart == null){

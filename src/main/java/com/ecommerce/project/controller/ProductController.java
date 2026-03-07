@@ -6,6 +6,8 @@ import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.service.ProductService;
 import com.ecommerce.project.util.AuthUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,13 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
+@Tag(name = "Product API")
 public class ProductController {
 
     private final ProductService productService;
     private final AuthUtil authUtils;
 
+    @Operation(summary = "Add a new product")
     @PostMapping("/admin/categories/{categoryId}/product")
     public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody ProductDTO productDTO,
                                               @PathVariable Long categoryId){
@@ -31,6 +35,7 @@ public class ProductController {
         return new ResponseEntity<>(savedProductDTO, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get all the available products")
     @GetMapping("/public/products")
     public ResponseEntity<ProductResponse> getAllProducts(
             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNumber,
@@ -42,6 +47,7 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get products in a particular category")
     @GetMapping("/public/category/{categoryId}/products")
     public ResponseEntity<ProductResponse> getProductsByCategory(@PathVariable Long categoryId,
                                                                  @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNumber,
@@ -52,6 +58,7 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Search products by name")
     @GetMapping("/public/products/keyword/{keyword}")
     public ResponseEntity<ProductResponse> getProductByKeyword(@PathVariable String keyword,
                                                                @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNumber,
@@ -62,18 +69,21 @@ public class ProductController {
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
     }
 
+    @Operation(summary = "Update product by productId")
     @PutMapping("/admin/products/{productId}")
     public ResponseEntity<ProductDTO> updateProduct(@PathVariable Long productId, @Valid @RequestBody ProductDTO productDTO){
         ProductDTO savedProductDTO = productService.updateProduct(productId, productDTO);
         return new ResponseEntity<>(savedProductDTO, HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete product by productId")
     @DeleteMapping("/admin/products/{productId}")
     public ResponseEntity<ProductDTO> deleteProduct(@PathVariable Long productId){
         ProductDTO productDTO = productService.deleteProduct(productId);
         return new ResponseEntity<>(productDTO, HttpStatus.OK);
     }
 
+    @Operation(summary = "Upload image of the product")
     @PutMapping("/admin/products/{productId}/image")
     public ResponseEntity<ProductDTO> updateProductImage(@PathVariable Long productId, @RequestParam MultipartFile image) throws IOException {
         ProductDTO updatedProductDTO = productService.updateProductImage(productId, image);

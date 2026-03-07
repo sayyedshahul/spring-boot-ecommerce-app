@@ -8,6 +8,8 @@ import com.ecommerce.project.security.request.LoginRequest;
 import com.ecommerce.project.security.request.SignUpRequest;
 import com.ecommerce.project.security.response.MessageResponse;
 import com.ecommerce.project.security.response.UserInfoResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -30,6 +32,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication API")
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -46,6 +49,7 @@ public class AuthController {
     @Autowired
     RoleRepository roleRepository;
 
+    @Operation(summary = "Sign in")
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest){
         Authentication authentication;
@@ -79,6 +83,7 @@ public class AuthController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, jwtCookie.toString()).body(response);
     }
 
+    @Operation(summary = "Sign up as a new user")
     @PostMapping("/signup")
     public ResponseEntity<MessageResponse> signUpUser(@Valid @RequestBody SignUpRequest request){
         if(userRepository.existsByUsername(request.getUsername())) {
@@ -123,6 +128,7 @@ public class AuthController {
         return ResponseEntity.ok(new MessageResponse("User Registered successfully"));
     }
 
+    @Operation(summary = "Get the logged in username")
     @GetMapping("/username")
     public String getCurrentUsername(Authentication authentication){
         if(authentication != null){
@@ -131,6 +137,7 @@ public class AuthController {
         return null;
     }
 
+    @Operation(summary = "Get the logged in user details")
     @GetMapping("/user")
     public ResponseEntity<?> getCurrentUserDetails(Authentication authentication){
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -145,6 +152,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Logout")
     @GetMapping("/signout")
     public ResponseEntity<MessageResponse> signoutUser(){
         ResponseCookie cookie = jwtUtils.getCleanJwtCookie();

@@ -23,7 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 import java.util.Set;
 
 @Configuration
@@ -69,10 +68,9 @@ public class WebSecurityConfig {
                                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                                 .requestMatchers("/h2-console/**").permitAll()
                                                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                                                .requestMatchers("api/seller/**").hasRole("SELLER")
+                                                .requestMatchers("/api/seller/**").hasRole("SELLER")
                                                 .requestMatchers("/api/public/**").permitAll()
                                                 .requestMatchers("/swagger-ui/**").permitAll()
-                                                .requestMatchers("/api/test/**").permitAll()
                                                 .requestMatchers("/images/**").permitAll()
                                                 .anyRequest().authenticated());
 

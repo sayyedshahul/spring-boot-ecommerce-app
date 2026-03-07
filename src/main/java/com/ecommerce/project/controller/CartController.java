@@ -7,6 +7,8 @@ import com.ecommerce.project.payload.UpdateCartQuantityDTO;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.util.AuthUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,23 +19,27 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/carts")
 @RequiredArgsConstructor
+@Tag(name = "Cart API")
 public class CartController {
     private final CartService cartService;
     private final AuthUtil authUtils;
     private final CartRepository cartRepository;
 
+    @Operation(summary = "Add a new product to cart")
     @PostMapping("/products/{productId}/quantity/{quantity}")
     public ResponseEntity<CartDTO> addProductToCart(@PathVariable Long productId, @PathVariable Integer quantity){
         CartDTO cartDTO = cartService.addProductToCart(productId, quantity);
         return new ResponseEntity<CartDTO>(cartDTO, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Get All carts")
     @GetMapping
     public ResponseEntity<List<CartDTO>> getAllCarts(){
         List<CartDTO> cartDTOs = cartService.getAllCarts();
         return new ResponseEntity<>(cartDTOs, HttpStatus.OK);
     }
 
+    @Operation(summary = "Get current user cart")
     @GetMapping("/users/cart")
     public ResponseEntity<CartDTO> getCartById(){
         String emailId = authUtils.getLoggedInEmail();
@@ -53,6 +59,7 @@ public class CartController {
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete a product by productId from cart")
     @DeleteMapping("/{cartId}/products/{productId}")
     public ResponseEntity<String> deleteProductFromCart(@PathVariable Long cartId, @PathVariable Long productId){
         String message = cartService.deleteProductFromCart(cartId, productId);
