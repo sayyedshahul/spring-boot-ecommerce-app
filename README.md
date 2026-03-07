@@ -88,4 +88,7 @@ Built to showcase practical backend development skills suitable for real-world a
 - Containerize the application using **Docker** for easier deployment.
 - Integrate **email notifications** for order confirmation and status updates.
 
+## Postman Collection
 
+- Import the Postman collection from:
+/postman/ecommerce-api.postman_collection.json
