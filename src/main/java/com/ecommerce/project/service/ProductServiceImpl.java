@@ -14,6 +14,9 @@ import com.ecommerce.project.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +40,7 @@ public class ProductServiceImpl implements ProductService{
     private String imageUploadPath;
 
     @Override
+    @CacheEvict(value = {"product-list", "product-search"}, allEntries = true)
     public ProductDTO addProduct(Long categoryId, ProductDTO productDTO, User user) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new ResourceNotFoundException("Category", "categoryId", categoryId));
@@ -82,6 +86,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Cacheable(value = "product-list", key = "{#pageNumber, #pageSize, #sortBy, #sortOrder}", condition = "#pageNumber == 0")
     public ProductResponse getAllProducts(int pageNumber, int pageSize, String sortBy, String sortOrder) {
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
@@ -94,7 +99,9 @@ public class ProductServiceImpl implements ProductService{
         return convertProductPageToProductResponse(pageNumber, pageSize, productPage);
     }
 
+
     @Override
+    @Cacheable(value = "product-list", key = "{#categoryId, #pageNumber, #pageSize, #sortBy, #sortOrder}", condition = "#pageNumber == 0")
     public ProductResponse getProductsByCategory(Long categoryId, int pageNumber, int pageSize, String sortBy, String sortOrder) {
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
@@ -110,6 +117,11 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Cacheable(
+            value = "product-search",
+            key = "{#keyword, #pageNumber, #pageSize, #sortBy, #sortOrder}",
+            condition = "#keyword.toLowerCase() matches 'iphone|samsung|laptop|shoes|chocolate'"
+    )
     public ProductResponse searchProductsByKeyword(String keyword, int pageNumber, int pageSize, String sortBy, String sortOrder) {
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                 ? Sort.by(sortBy).ascending()
@@ -122,6 +134,10 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = {"product-list", "product-search"}, allEntries = true),
+            @CacheEvict(value = "product", key = "#productId")
+    })
     public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
         Product productFromDb = productRepository.findById(productId).orElseThrow(() ->
                 new ResourceNotFoundException("Product", "productId", productId));
@@ -149,6 +165,10 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = {"product-list", "product-search"}, allEntries = true),
+            @CacheEvict(value = "product", key = "#productId")
+    })
     public ProductDTO deleteProduct(Long productId) {
         Product productFromDb = productRepository.findById(productId).orElseThrow(() ->
                 new ResourceNotFoundException("Product", "productId", productId));
@@ -159,6 +179,10 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    @Caching(evict = {
+            @CacheEvict(value = {"product-list", "product-search"}, allEntries = true),
+            @CacheEvict(value = "product", key = "#productId")
+    })
     public ProductDTO updateProductImage(Long productId, MultipartFile image) throws IOException {
         Product productFromDb = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
@@ -170,5 +194,14 @@ public class ProductServiceImpl implements ProductService{
         Product savedProduct = productRepository.save(productFromDb);
 
         return modelMapper.map(savedProduct, ProductDTO.class);
+    }
+
+    @Override
+    @Cacheable(value = "product", key = "#productId")
+    public ProductDTO getProductById(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
+
+        return modelMapper.map(product, ProductDTO.class);
     }
 }

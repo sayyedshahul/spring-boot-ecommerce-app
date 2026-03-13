@@ -8,6 +8,8 @@ import com.ecommerce.project.payload.CategoryResponse;
 import com.ecommerce.project.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +26,7 @@ public class CategoryServiceImpl implements CategoryService{
     private ModelMapper modelMapper;
 
     @Override
+    @Cacheable(value = "category-list", key = "{#pageNumber, #pageSize, #sortBy, #sortOrder}", condition = "#pageNumber == 0")
     public CategoryResponse getAllCategories(int pageNumber, int pageSize, String sortBy, String sortOrder) {
         Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
                     ? Sort.by(sortBy).ascending()
@@ -48,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @CacheEvict(value="category-list", allEntries = true)
     public CategoryDTO createCategory(CategoryDTO categoryDTO) {
         Category category = modelMapper.map(categoryDTO, Category.class);
         Category foundCategory = categoryRepository.findByCategoryName(category.getCategoryName());
@@ -60,6 +64,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @CacheEvict(value="category-list", allEntries = true)
     public CategoryDTO deleteCategory(Long categoryId) {
         Category foundCategory =
                 categoryRepository.findById(categoryId)
@@ -70,6 +75,7 @@ public class CategoryServiceImpl implements CategoryService{
     }
 
     @Override
+    @CacheEvict(value="category-list", allEntries = true)
     public CategoryDTO updateCategory(CategoryDTO categoryDTO, long categoryId) {
         Category category = modelMapper.map(categoryDTO, Category.class);
         Category foundCategory =

@@ -1,7 +1,7 @@
 # Spring Boot eCommerce Application
 
 This is a full-featured **Spring Boot eCommerce backend application**.  
-It demonstrates hands-on experience with **REST API design, Spring Data JPA, JWT authentication, role-based authorization**, and clean application architecture with **DTOs and service layers**.  
+It demonstrates hands-on experience with **REST API design, Spring Data JPA, JWT authentication, role-based authorization, Redis Caching**, and clean application architecture with **DTOs and service layers**.  
 Built to showcase practical backend development skills suitable for real-world applications.
 
 ---
@@ -31,6 +31,14 @@ Built to showcase practical backend development skills suitable for real-world a
     - Entities, DTOs, and service layer separation
     - Exception handling and validations
 
+- **Redis Caching:**  
+  Implemented Redis caching for frequently accessed endpoints:
+    - **Product listings (`product-list`)** – caches first pages of product lists with pagination and sorting, TTL 5 minutes.
+    - **Product search (`product-search`)** – caches hot search keywords (e.g., iPhone, Samsung) with TTL 1 minute to keep results fresh.
+    - **Category listings (`category-list`)** – caches frequently accessed category pages with TTL 10 minute.
+    - **Eviction strategy:** All list/search caches are automatically evicted on product creation, update, deletion, or image update.
+    - **Benefits:** Reduced database load, faster API response times, and efficient handling of frequently requested data.
+
 - **Swagger Integration**
     - API documentation via OpenAPI/Swagger UI
     - JWT authentication support in Swagger
@@ -44,6 +52,7 @@ Built to showcase practical backend development skills suitable for real-world a
 - Spring Data JPA / Hibernate
 - MySQL / H2 Database
 - Spring Security with JWT
+- Redis
 - ModelMapper
 - Swagger / OpenAPI
 
@@ -78,13 +87,13 @@ Built to showcase practical backend development skills suitable for real-world a
 - **Swagger Integration:** OpenAPI/Swagger for automatic API documentation and easier testing.
 - **Pagination and Sorting:** Implemented for product listings and order history to handle large datasets efficiently.
 - **CommandLineRunner Initialization:** Roles and default users are initialized on application startup to simplify testing and demoing.
+- **Redis Caching:** Implemented for product and category data to enable faster API response times, handle frequently access datasets efficiently  and, reduce load on the database.
 
 
 ## Future Improvements
 
 - Add **payment gateway integration** for transactions.
 - Implement **unit and integration tests** for services and controllers.
-- Introduce **Redis caching** for frequently accessed data like products and categories.
 - Containerize the application using **Docker** for easier deployment.
 - Integrate **email notifications** for order confirmation and status updates.
 
