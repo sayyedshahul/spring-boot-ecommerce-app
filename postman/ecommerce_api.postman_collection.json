@@ -180,7 +180,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTc3MjI2MjIwOCwiZXhwIjoxNzcyMjY1MjA4fQ.yZtImrCg8eeWHI788WrfdyGHzMtABqoAuWwyI3OqGTg",
+                "value": "Bearer ",
                 "type": "text"
               }
             ],
@@ -194,7 +194,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:8080/api/public/products?sortBy=productName&pageNumber=0&sortOrder=asc&pageSize=10",
+              "raw": "http://localhost:8080/api/public/products?sortBy=productName&pageNumber=0&sortOrder=desc&pageSize=10",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -216,7 +216,7 @@
                 },
                 {
                   "key": "sortOrder",
-                  "value": "asc"
+                  "value": "desc"
                 },
                 {
                   "key": "pageSize",
@@ -253,7 +253,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTc3MjI2MjIwOCwiZXhwIjoxNzcyMjY1MjA4fQ.yZtImrCg8eeWHI788WrfdyGHzMtABqoAuWwyI3OqGTg",
+                "value": "Bearer ",
                 "type": "text"
               }
             ],
@@ -432,7 +432,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMyIsImlhdCI6MTc3MjI2MzYwOCwiZXhwIjoxNzcyMjY2NjA4fQ.jkWF1QWHY1_Gbs8DvozraDSKAlqgBAmg7is0sMoxZ3o",
+                "value": "Bearer ",
                 "type": "text"
               }
             ],
@@ -498,8 +498,9 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTc3MjI2NDIxMiwiZXhwIjoxNzcyMjY3MjEyfQ.giIw1StPNtzmIQdiCcBi5-bqBoc_9rLU2lyYDb_Vx4s",
-                "type": "text"
+                "value": "Bearer ",
+                "type": "text",
+                "disabled": true
               }
             ],
             "body": {
@@ -646,7 +647,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTc3MjI2MjIwOCwiZXhwIjoxNzcyMjY1MjA4fQ.yZtImrCg8eeWHI788WrfdyGHzMtABqoAuWwyI3OqGTg",
+                "value": "Bearer ",
                 "type": "text"
               }
             ],
@@ -685,7 +686,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTc3MjI2MjIwOCwiZXhwIjoxNzcyMjY1MjA4fQ.yZtImrCg8eeWHI788WrfdyGHzMtABqoAuWwyI3OqGTg",
+                "value": "Bearer ",
                 "type": "text"
               }
             ],
@@ -724,7 +725,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyMSIsImlhdCI6MTc3MjI2MjIwOCwiZXhwIjoxNzcyMjY1MjA4fQ.yZtImrCg8eeWHI788WrfdyGHzMtABqoAuWwyI3OqGTg",
+                "value": "Bearer ",
                 "type": "text"
               }
             ],
