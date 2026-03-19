@@ -43,7 +43,7 @@ public class ProductController {
             @RequestParam(defaultValue = AppConstants.PAGE_NUMBER) int pageNumber,
             @RequestParam(defaultValue = AppConstants.PAGE_SIZE) int pageSize,
             @RequestParam(defaultValue = AppConstants.SORT_ORDER) String sortOrder,
-            @RequestParam(defaultValue = "productId") String sortBy
+            @RequestParam(defaultValue = AppConstants.SORT_PRODUCTS_BY) String sortBy
     ){
         ProductResponse productResponse = productService.getAllProducts(pageNumber, pageSize, sortBy, sortOrder);
         return new ResponseEntity<>(productResponse, HttpStatus.OK);
