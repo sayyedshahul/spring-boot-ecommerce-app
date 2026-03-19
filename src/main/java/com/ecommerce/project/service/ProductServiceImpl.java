@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     @CacheEvict(value = {"product-list", "product-search"}, allEntries = true)
-    public ProductDTO addProduct(Long categoryId, ProductDTO productDTO, User user) {
+    public ProductDTO addProduct(Long categoryId, ProductDTO productDTO, User seller) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() ->
                 new ResourceNotFoundException("Category", "categoryId", categoryId));
 
@@ -54,7 +54,7 @@ public class ProductServiceImpl implements ProductService{
 
         product.setImage("default.png");
         product.setCategory(category);
-        product.setUser(user);
+        product.setUser(seller);
 
         Double specialPrice = product.getPrice() -
                 (product.getDiscount() * 0.01 * product.getPrice());
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService{
         return modelMapper.map(savedProduct, ProductDTO.class);
     }
 
-    public ProductResponse convertProductPageToProductResponse(int pageNumber, int pageSize, Page<Product> productPage){
+    private ProductResponse convertProductPageToProductResponse(int pageNumber, int pageSize, Page<Product> productPage){
         List<Product> products = productPage.getContent();
 
         List<ProductDTO> productDTOs = products.stream()
