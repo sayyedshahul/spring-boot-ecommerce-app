@@ -28,11 +28,7 @@ public class CategoryServiceImpl implements CategoryService{
     @Override
     @Cacheable(value = "category-list", key = "{#pageNumber, #pageSize, #sortBy, #sortOrder}", condition = "#pageNumber == 0")
     public CategoryResponse getAllCategories(int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                    ? Sort.by(sortBy).ascending()
-                    : Sort.by(sortBy).descending();
-
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable pageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);;
         Page<Category> categoryPage = categoryRepository.findAll(pageDetails);
         List<Category> categories = categoryPage.getContent();
 

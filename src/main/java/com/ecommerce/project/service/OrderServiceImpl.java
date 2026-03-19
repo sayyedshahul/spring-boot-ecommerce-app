@@ -100,11 +100,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public OrderResponse getAllOrders(int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable pageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);
         Page<Order> orderPage = orderRepository.findAll(pageDetails);
         List<Order> orders = orderPage.getContent();
 
@@ -132,11 +128,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     public SellerOrderResponseDTO getAllSellerOrders(User seller, int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable pageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable pageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);;
         Page<OrderItem> sellerOrderItemsPage = orderItemRepository.findOrdersBySellerEmail(seller.getEmail(), pageDetails);
         List<OrderItem> sellerOrderItems = sellerOrderItemsPage.getContent();
 

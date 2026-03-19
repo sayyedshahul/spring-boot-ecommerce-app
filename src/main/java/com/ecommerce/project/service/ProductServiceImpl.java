@@ -18,9 +18,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
@@ -88,11 +86,7 @@ public class ProductServiceImpl implements ProductService{
     @Override
     @Cacheable(value = "product-list", key = "{#pageNumber, #pageSize, #sortBy, #sortOrder}", condition = "#pageNumber == 0")
     public ProductResponse getAllProducts(int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-
-        Pageable productPageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable productPageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);
 
         Page<Product> productPage = productRepository.findAll(productPageDetails);
 
@@ -103,16 +97,13 @@ public class ProductServiceImpl implements ProductService{
     @Override
     @Cacheable(value = "product-list", key = "{#categoryId, #pageNumber, #pageSize, #sortBy, #sortOrder}", condition = "#pageNumber == 0")
     public ProductResponse getProductsByCategory(Long categoryId, int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable productPageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable productPageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Category", "categoryId", categoryId));
 
-        Page<Product> productPage = productRepository.findByCategoryOrderByPriceAsc(category, productPageDetails);
+        Page<Product> productPage = productRepository.findByCategory(category, productPageDetails);
         return convertProductPageToProductResponse(pageNumber, pageSize, productPage);
     }
 
@@ -123,10 +114,7 @@ public class ProductServiceImpl implements ProductService{
             condition = "#keyword.toLowerCase() matches 'iphone|samsung|laptop|shoes|chocolate'"
     )
     public ProductResponse searchProductsByKeyword(String keyword, int pageNumber, int pageSize, String sortBy, String sortOrder) {
-        Sort sortByAndOrder = sortOrder.equalsIgnoreCase("asc")
-                ? Sort.by(sortBy).ascending()
-                : Sort.by(sortBy).descending();
-        Pageable productPageDetails = PageRequest.of(pageNumber, pageSize, sortByAndOrder);
+        Pageable productPageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);
 
         Page<Product> productPage = productRepository.findByProductNameContainingIgnoreCase(keyword, productPageDetails);
 
@@ -158,7 +146,6 @@ public class ProductServiceImpl implements ProductService{
         Product savedProduct = productRepository.save(productFromDb);
 
         List<Cart> carts = cartRepository.findCartsByProduct(productId);
-
         carts.forEach(cart -> cartService.updateProductInCart(cart.getCartId(), productId));
 
         return modelMapper.map(savedProduct, ProductDTO.class);
