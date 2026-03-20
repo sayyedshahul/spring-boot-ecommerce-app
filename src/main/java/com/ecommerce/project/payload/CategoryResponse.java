@@ -19,4 +19,8 @@ public class CategoryResponse implements Serializable {
     private long totalElements;
     private int totalPages;
     private boolean lastPages;
+
+    public boolean getLastPages() {
+        return this.lastPages;
+    }
 }
