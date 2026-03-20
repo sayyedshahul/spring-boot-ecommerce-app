@@ -11,6 +11,7 @@ import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -33,10 +34,15 @@ public class ProductServiceTest {
     private CategoryRepository categoryRepository;
     @Mock
     private FileServiceImpl fileService;
-    @Spy
-    private ModelMapper modelMapper = new ModelMapper();
-    @InjectMocks
+    @Mock
+    private CartService cartService;
+    private final ModelMapper modelMapper = new ModelMapper();
     private ProductServiceImpl productService;
+
+    @BeforeEach
+    void setup(){
+        productService = new ProductServiceImpl(categoryRepository, productRepository, modelMapper, fileService, cartRepository, cartService);
+    }
 
     private void assertPageableHasSorting(int pageNumber, int pageSize, Sort.Direction sortOrder, String sortBy, Pageable pageable){ // This method verifies whether the Pageable object contains the correct sort parameters
         Assertions.assertEquals(pageNumber, pageable.getPageNumber());
