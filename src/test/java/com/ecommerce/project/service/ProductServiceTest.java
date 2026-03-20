@@ -93,6 +93,27 @@ public class ProductServiceTest {
     }
 
     @Test
+    void convertProductPageToProductResponseTest_ShouldPass_NormalCondition(){
+        int pageNumber = 0;
+        int pageSize = 10;
+        String sortBy = "price";
+        String sortOrder = "asc";
+
+        List<Product> productList = getTestProductList();
+        Page<Product> productPage = new PageImpl<>(productList, PageRequest.of(pageNumber, pageSize), 2);
+
+        ProductResponse response = productService.convertProductPageToProductResponse(pageNumber, pageSize, productPage);
+
+        Assertions.assertEquals(2, response.getContent().size());
+        Assertions.assertEquals(pageNumber, response.getPageNumber());
+        Assertions.assertEquals(pageSize, response.getPageSize());
+        Assertions.assertEquals(2, response.getTotalElements());
+        Assertions.assertEquals(1 ,response.getTotalPages());
+        Assertions.assertTrue(response.isLastPage());
+    }
+
+
+    @Test
     void addProductTest_ShouldPass_UniqueProductAddition(){
         Long categoryId = 1L;
         Category category = getTestCategory(categoryId);
@@ -150,7 +171,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void addProductTest_ShouldThrowResourceNotFoundException_CategoryDoesntExist(){
+     void addProductTest_ShouldThrowResourceNotFoundException_CategoryDoesntExist(){
         Long categoryId = 1L;
 
         ProductDTO inputProductDTO = getTestInputProductDTO();
@@ -168,7 +189,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getAllProductsTest_ShouldReturnProductResponse_withAscendingSort(){
+     void getAllProductsTest_ShouldReturnProductResponse_withAscendingSort(){
         int pageNumber = 0;
         int pageSize = 10;
         String sortBy = "price";
@@ -191,14 +212,10 @@ public class ProductServiceTest {
 
         Assertions.assertEquals(2, response.getContent().size());
         Assertions.assertEquals(pageNumber, response.getPageNumber());
-        Assertions.assertEquals(pageSize, response.getPageSize());
-        Assertions.assertEquals(2, response.getTotalElements());
-        Assertions.assertEquals(1 ,response.getTotalPages());
-        Assertions.assertTrue(response.isLastPage());
     }
 
     @Test
-    public void getAllProductsTest_ShouldReturnProductResponse_withDescendingSort(){
+     void getAllProductsTest_ShouldReturnProductResponse_withDescendingSort(){
         int pageNumber = 0;
         int pageSize = 10;
         String sortBy = "price";
@@ -219,10 +236,11 @@ public class ProductServiceTest {
 
         assertPageableHasSorting(pageNumber, pageSize, Sort.Direction.DESC, sortBy, pageable);
         Assertions.assertEquals(2, response.getContent().size());
+        Assertions.assertEquals(pageNumber, response.getPageNumber());
     }
 
     @Test
-    public void getAllProductsTest_ShouldReturnEmptyResponse_EmptyProductList() {
+     void getAllProductsTest_ShouldReturnEmptyResponse_EmptyProductList() {
         int pageNumber = 0;
         int pageSize = 10;
         String sortBy = "price";
@@ -238,10 +256,11 @@ public class ProductServiceTest {
         Mockito.verify(productRepository).findAll(Mockito.any(Pageable.class));
 
         Assertions.assertEquals(0, response.getContent().size());
+        Assertions.assertEquals(pageNumber, response.getPageNumber());
     }
 
     @Test
-    public void getProductsByCategoryTest_ShouldThrowException_CategoryDoesntExist(){
+     void getProductsByCategoryTest_ShouldThrowException_CategoryDoesntExist(){
         Long categoryId = 1L;
 
         Mockito.when(categoryRepository.findById(categoryId))
@@ -252,7 +271,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProductsByCategoryTest_ShouldReturnProductResponse_CategoryExist(){
+     void getProductsByCategoryTest_ShouldReturnProductResponse_CategoryExist(){
         int pageNumber = 0;
         int pageSize = 10;
         String sortBy = "productId";
@@ -276,7 +295,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProductsByCategoryTest_ShouldReturnEmptyProductResponse_NoProductsExist(){
+     void getProductsByCategoryTest_ShouldReturnEmptyProductResponse_NoProductsExist(){
         int pageNumber = 0;
         int pageSize = 10;
         String sortBy = "productId";
@@ -300,7 +319,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void updateProductTest_ShouldReturnProductDTO_ProductExists(){
+     void updateProductTest_ShouldReturnProductDTO_ProductExists(){
         Long productId = 1L;
         Product product1 = new Product();
         product1.setProductId(productId);
@@ -333,7 +352,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void updateProductTest_ShouldThrowException_ProductDoesntExist(){
+     void updateProductTest_ShouldThrowException_ProductDoesntExist(){
         Long productId = 1L;
 
         ProductDTO inputProductDTO = getTestInputProductDTO();
@@ -347,7 +366,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void deleteProductTest_ShouldPass_ProductExist(){
+     void deleteProductTest_ShouldPass_ProductExist(){
         Long productId = 1L;
         Product product1 = new Product();
         product1.setProductId(productId);
@@ -365,7 +384,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void deleteProductTest_ShouldThrowException_ProductDoesntExist(){
+     void deleteProductTest_ShouldThrowException_ProductDoesntExist(){
         Long productId = 1L;
 
         Mockito.when(productRepository.findById(productId))
@@ -377,7 +396,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void updateProductImageTest_ShouldPass_ProductExist() throws IOException {
+     void updateProductImageTest_ShouldPass_ProductExist() throws IOException {
         Long productId = 1L;
         Product product1 = new Product();
         product1.setProductId(productId);
@@ -408,7 +427,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void updateProductImageTest_ShouldThrowException_ProductDoesntExist() throws IOException {
+     void updateProductImageTest_ShouldThrowException_ProductDoesntExist() throws IOException {
         Long productId = 1L;
         MultipartFile file = Mockito.mock(MultipartFile.class);
 
@@ -423,7 +442,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProductByIdTest_ShouldPass_ProductExist(){
+     void getProductByIdTest_ShouldPass_ProductExist(){
         Long productId = 1L;
         Product product1 = new Product();
         product1.setProductId(productId);
@@ -437,7 +456,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void getProductByIdTest_ShouldThrowException_ProductDoesntExist(){
+     void getProductByIdTest_ShouldThrowException_ProductDoesntExist(){
         Long productId = 1L;
 
         Mockito.when(productRepository.findById(productId))

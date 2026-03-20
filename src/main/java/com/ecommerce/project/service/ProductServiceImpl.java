@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService{
         return modelMapper.map(savedProduct, ProductDTO.class);
     }
 
-    private ProductResponse convertProductPageToProductResponse(int pageNumber, int pageSize, Page<Product> productPage){
+    public ProductResponse convertProductPageToProductResponse(int pageNumber, int pageSize, Page<Product> productPage){
         List<Product> products = productPage.getContent();
 
         List<ProductDTO> productDTOs = products.stream()
