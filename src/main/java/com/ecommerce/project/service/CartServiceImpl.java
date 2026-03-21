@@ -134,7 +134,6 @@ public class CartServiceImpl implements CartService{
             throw new APIException("Order quantity cannot be negative");
         }
         else if(newQuantity == 0){
-            System.out.println("inside equals 0");
             cart.setTotalPrice(cart.getTotalPrice() -
                     (cartItem.getProductPrice() * cartItem.getQuantity()));
             cartItemRepository.deleteCartItemByCartIdAndProductId(cart.getCartId(), product.getProductId());
@@ -182,13 +181,13 @@ public class CartServiceImpl implements CartService{
 
         CartItem cartItem = cartItemRepository.findCartItemByProductIdAndCartId(productId, cartId);
         if(cartItem == null)
-            throw new APIException("Product " + product.getProductName() + " not available in the cart!!!");
+            throw new ResourceNotFoundException("CartItem", "Product Id And CartId", productId);
 
 
         cart.setTotalPrice(cart.getTotalPrice() - (cartItem.getProductPrice() * cartItem.getQuantity())); // Negate old price.
 
         cartItem.setProductPrice(product.getSpecialPrice());
-        cartItem.setProductPrice(product.getDiscount());
+        cartItem.setDiscount(product.getDiscount());
 
         cart.setTotalPrice(cart.getTotalPrice() + (cartItem.getProductPrice() * cartItem.getQuantity())); // Set new price
     }
