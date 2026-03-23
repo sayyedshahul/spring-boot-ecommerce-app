@@ -7,5 +7,10 @@ import java.util.List;
 @Getter
 @Setter
 public class SellerOrderResponseDTO {
-    private List<OrderItemDTO> sellerOrderItems; // Order Items for a particular seller.
+    private List<OrderItemDTO> content;// Order Items for a particular seller.
+    private Integer pageNumber;
+    private Integer pageSize;
+    private Long totalElements;
+    private Integer totalPages;
+    private boolean lastPage;
 }

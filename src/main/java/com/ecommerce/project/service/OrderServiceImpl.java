@@ -23,7 +23,6 @@ public class OrderServiceImpl implements OrderService{
     private final AddressRepository addressRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderRepository orderRepository;
-    private final PaymentRepository paymentRepository;
     private final ModelMapper modelMapper;
 
     @Transactional
@@ -50,7 +49,6 @@ public class OrderServiceImpl implements OrderService{
         order.setPayment(payment);
         payment.setOrder(order);
         orderRepository.save(order);
-
 
         // Convert cart items to order items.
         List<CartItem> cartItems = cart.getCartItems();
@@ -129,7 +127,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     public SellerOrderResponseDTO getAllSellerOrders(User seller, int pageNumber, int pageSize, String sortBy, String sortOrder) {
         Pageable pageDetails = PageableUtility.getPageable(pageNumber, pageSize, sortBy, sortOrder);;
-        Page<OrderItem> sellerOrderItemsPage = orderItemRepository.findOrdersBySellerEmail(seller.getEmail(), pageDetails);
+        Page<OrderItem> sellerOrderItemsPage = orderItemRepository.findOrderItemsBySellerEmail(seller.getEmail(), pageDetails);
         List<OrderItem> sellerOrderItems = sellerOrderItemsPage.getContent();
 
 
@@ -140,7 +138,12 @@ public class OrderServiceImpl implements OrderService{
         }).toList();
 
         SellerOrderResponseDTO response = new SellerOrderResponseDTO();
-        response.setSellerOrderItems(sellerOrderItemDTOs);
+        response.setContent(sellerOrderItemDTOs);
+        response.setPageNumber(sellerOrderItemsPage.getNumber());
+        response.setLastPage(sellerOrderItemsPage.isLast());
+        response.setTotalPages(sellerOrderItemsPage.getTotalPages());
+        response.setPageSize(sellerOrderItemsPage.getSize());
+        response.setTotalElements(sellerOrderItemsPage.getTotalElements());
 
         return response;
     }

@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     @Query("SELECT oi from OrderItem oi where oi.product.user.email = ?1")
-    Page<OrderItem> findOrdersBySellerEmail(String email, Pageable pageDetails);
+    Page<OrderItem> findOrderItemsBySellerEmail(String email, Pageable pageDetails);
 }
