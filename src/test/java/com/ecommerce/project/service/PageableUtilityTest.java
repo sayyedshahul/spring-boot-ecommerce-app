@@ -1,6 +1,6 @@
 package com.ecommerce.project.utility;
 
-import com.ecommerce.project.service.PageableUtility;
+import com.ecommerce.project.service.impl.PageableUtility;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
