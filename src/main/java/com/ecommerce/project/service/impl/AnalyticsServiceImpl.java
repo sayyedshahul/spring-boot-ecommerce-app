@@ -1,14 +1,15 @@
-package com.ecommerce.project.service;
+package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.payload.AnalyticsResponse;
 import com.ecommerce.project.repositories.OrderRepository;
 import com.ecommerce.project.repositories.ProductRepository;
+import com.ecommerce.project.service.AnalyticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class AnalyticsServiceImpl implements AnalyticsService{
+public class AnalyticsServiceImpl implements AnalyticsService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
 

@@ -1,4 +1,4 @@
-package com.ecommerce.project.service;
+package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
@@ -10,8 +10,7 @@ import com.ecommerce.project.payload.ProductResponse;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.CategoryRepository;
 import com.ecommerce.project.repositories.ProductRepository;
-import com.ecommerce.project.service.impl.FileServiceImpl;
-import com.ecommerce.project.service.impl.ProductServiceImpl;
+import com.ecommerce.project.service.CartService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class ProductServiceTest {
+public class ProductServiceImplTest {
     @Mock
     private ProductRepository productRepository;
     @Mock

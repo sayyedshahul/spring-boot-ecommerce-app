@@ -1,5 +1,6 @@
-package com.ecommerce.project.service;
+package com.ecommerce.project.service.impl;
 
+import com.ecommerce.project.service.FileService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -9,7 +10,7 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 @Service
-public class FileServiceImpl implements FileService{
+public class FileServiceImpl implements FileService {
     @Override
     public String uploadImage(String path, MultipartFile image) throws IOException {
         String originalFileName = image.getOriginalFilename();

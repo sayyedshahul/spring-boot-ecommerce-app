@@ -1,4 +1,4 @@
-package com.ecommerce.project.service;
+package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
@@ -11,6 +11,7 @@ import com.ecommerce.project.payload.ProductDTO;
 import com.ecommerce.project.repositories.CartItemRepository;
 import com.ecommerce.project.repositories.CartRepository;
 import com.ecommerce.project.repositories.ProductRepository;
+import com.ecommerce.project.service.CartService;
 import com.ecommerce.project.util.AuthUtil;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CartServiceImpl implements CartService{
+public class CartServiceImpl implements CartService {
 
     private final AuthUtil authUtils;
     private final CartRepository cartRepository;

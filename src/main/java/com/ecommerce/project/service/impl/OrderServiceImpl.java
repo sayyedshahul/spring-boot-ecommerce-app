@@ -1,24 +1,23 @@
-package com.ecommerce.project.service;
+package com.ecommerce.project.service.impl;
 
 import com.ecommerce.project.exception.APIException;
 import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.*;
 import com.ecommerce.project.payload.*;
 import com.ecommerce.project.repositories.*;
+import com.ecommerce.project.service.OrderService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService{
+public class OrderServiceImpl implements OrderService {
     private final CartRepository cartRepository;
     private final AddressRepository addressRepository;
     private final OrderItemRepository orderItemRepository;
