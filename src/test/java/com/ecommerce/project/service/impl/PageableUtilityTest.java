@@ -1,4 +1,4 @@
-package com.ecommerce.project.utility;
+package com.ecommerce.project.service;
 
 import com.ecommerce.project.service.impl.PageableUtility;
 import org.junit.jupiter.api.Assertions;

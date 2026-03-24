@@ -5,6 +5,7 @@ import com.ecommerce.project.exception.ResourceNotFoundException;
 import com.ecommerce.project.model.*;
 import com.ecommerce.project.payload.*;
 import com.ecommerce.project.repositories.*;
+import com.ecommerce.project.service.impl.OrderServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,8 +31,6 @@ class OrderServiceTest {
     @Mock private OrderRepository orderRepository;
 
     private ModelMapper modelMapper = new ModelMapper();
-
-    @InjectMocks
     private OrderServiceImpl orderService;
 
     @BeforeEach
