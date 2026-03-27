@@ -93,7 +93,7 @@ Built to showcase practical backend development skills suitable for real-world a
 ## Future Improvements
 
 - Add **payment gateway integration** for transactions.
-- Implement **unit and integration tests** for services and controllers.
+- Implement **integration tests** for services and controllers.
 - Containerize the application using **Docker** for easier deployment.
 - Integrate **email notifications** for order confirmation and status updates.
 
