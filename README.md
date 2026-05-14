@@ -1,8 +1,6 @@
 # Spring Boot eCommerce Application
 
-This is a full-featured **Spring Boot eCommerce backend application**.  
-It demonstrates hands-on experience with **REST API design, Spring Data JPA, JWT authentication, role-based authorization, Redis Caching**, and clean application architecture with **DTOs and service layers**.  
-Built to showcase practical backend development skills suitable for real-world applications.
+This is a full-featured **Spring Boot eCommerce backend application**. It demonstrates hands-on experience with **REST API design, Spring Data JPA, JWT authentication, role-based authorization, Redis Caching, AWS, Docker**, and clean application architecture with **DTOs and service layers**. Built to showcase practical backend development skills suitable for real-world applications.
 
 ---
 
@@ -50,11 +48,73 @@ Built to showcase practical backend development skills suitable for real-world a
 - Java 17
 - Spring Boot 3.x
 - Spring Data JPA / Hibernate
-- MySQL / H2 Database
+- MySQL
 - Spring Security with JWT
 - Redis
-- ModelMapper
-- Swagger / OpenAPI
+- Swagger
+- Junit 5
+- Mockito
+- Docker
+- AWS Elastic Beanstalk
+- AWS RDS (MySQL)
+- AWS ElastiCache (Redis)
+
+---
+## 🐳 Docker Setup
+
+The application is dockerized for container-based development and deployment using Docker and Docker Compose.
+
+Separate containers are used for:
+- Spring Boot application
+- MySQL database
+- Redis cache
+
+---
+
+## Architecture Diagram
+![Ecommerce Backend Architecture.png](Ecommerce%20Backend%20Architecture.png)
+
+---
+
+## ☁️ AWS Deployment
+
+The application is deployed on AWS using:
+
+- AWS Elastic Beanstalk for application deployment and environment management
+- Amazon RDS (MySQL) for persistent relational data storage
+- Amazon ElastiCache (Redis) for caching
+- EC2 instances managed by Elastic Beanstalk
+- Environment-based configuration using Spring profiles
+- AWS Systems Manager (SSM) for instance access and debugging
+- Security groups and VPC networking for secure communication between services
+
+Key deployment/debugging tasks handled:
+- Configured production environment variables
+- Integrated Redis and MySQL with Spring Boot
+- Resolved 502/504 nginx gateway issues
+- Debugged Redis TLS and cache command compatibility issues
+- Monitored live application logs on EC2
+
+---
+## 🧪 Testing
+
+115+ unit tests were written using JUnit 5 and Mockito to validate service-layer business logic and controller behavior.
+
+Tested areas include:
+- Service-layer business logic and REST controllers
+- Validation, exception handling, and core API workflows
+
+---
+
+## 📘 API Documentation
+
+The REST APIs are documented using Swagger / OpenAPI.
+
+After starting the application, API documentation can be accessed at:
+
+```text
+http://localhost:8080/swagger-ui/index.html
+```
 
 ---
 
@@ -76,6 +136,7 @@ Built to showcase practical backend development skills suitable for real-world a
 4. **Access API docs**
    - Swagger UI at http://localhost:8080/swagger-ui/index.html
 
+---
 
 ## Design Decisions
 
@@ -89,15 +150,18 @@ Built to showcase practical backend development skills suitable for real-world a
 - **CommandLineRunner Initialization:** Roles and default users are initialized on application startup to simplify testing and demoing.
 - **Redis Caching:** Implemented for product and category data to enable faster API response times, handle frequently access datasets efficiently  and, reduce load on the database.
 
+---
 
 ## Future Improvements
 
 - Add **payment gateway integration** for transactions.
 - Implement **integration tests** for services and controllers.
-- Containerize the application using **Docker** for easier deployment.
 - Integrate **email notifications** for order confirmation and status updates.
+
+---
 
 ## Postman Collection
 
 - Import the Postman collection from:
 /postman/ecommerce-api.postman_collection.json
+
